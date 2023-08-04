@@ -1,0 +1,345 @@
+---
+title: "How Can a Wellness Technology Company Play It Smart?"
+author: "Ankita Gairola"
+date: "2023-07-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This case study from the Google Data Analytics professional Certificate. 
+
+
+## 1. Ask
+
+Bellabeat is a high-tech manufacturer of health-focused products for women. Since it was founded in 2013, Bellabeat has grown rapidly and quickly
+positioned itself as a tech-driven wellness company for women. 
+
+The aim of this project to analyze smart device usage data in order to gain insight into how consumers use non-Bellabeat smart
+devices.
+
+Questions:
+
+1. What are some trends in smart device usage?
+2. How could these trends apply to Bellabeat customers?
+3. How could these trends help influence Bellabeat marketing strategy?
+
+Deliverable:
+
+1. A clear summary of the business task
+2. A description of all data sources used
+3. Documentation of any cleaning or manipulation of data
+4. A summary of your analysis
+5. Supporting visualizations and key findings
+6. Your top high-level content recommendations based on your analysis.
+
+## 2. Prepare
+
+Data Source : Kaggle and contain 18 csv file
+
+Sample size: 30 Fitbit users
+
+Data Period: 12 March 2016 to 12 May 2016
+
+## 3. Process
+
+##### Set working Directory
+
+getwd()
+
+setwd("E:/Capstone projects_Google/Case Study 2")
+
+##### Required Packages
+
+install.packages("tidyverse")
+
+install.packages("readxl")
+
+install.packages("skimr")
+
+install.packages("janitor")
+
+install.packages("lubridate")
+
+install.packages("scales")
+
+install.packages("here")
+
+install.packages("dplyr")
+
+install.packages("ggplot2")
+
+install.packages("RColorBrewer)
+
+```{r}
+library("tidyverse")
+
+library("readxl")
+
+library("skimr")
+
+library("janitor")
+
+library("lubridate")
+
+library("scales")
+
+library("here")
+
+library("ggplot2")
+
+library("dplyr")
+
+library(RColorBrewer)
+
+```
+
+
+##### Data Importing
+
+```{r}
+Daily_Activity <- read.csv("E:/Capstone projects_Google/Case Study 2/Data Set/Fitabase Data 4.12.16-5.12.16/dailyActivity_merged.csv")
+
+Daily_Calories <- read.csv("E:/Capstone projects_Google/Case Study 2/Data Set/Fitabase Data 4.12.16-5.12.16/dailyCalories_merged.csv")
+
+Daily_Steps <- read.csv("E:/Capstone projects_Google/Case Study 2/Data Set/Fitabase Data 4.12.16-5.12.16/dailySteps_merged.csv")
+
+Sleep_Day <- read.csv("E:/Capstone projects_Google/Case Study 2/Data Set/Fitabase Data 4.12.16-5.12.16/sleepDay_merged.csv")
+
+Daily_Intensities <- read.csv("E:/Capstone projects_Google/Case Study 2/Data Set/Fitabase Data 4.12.16-5.12.16/dailyIntensities_merged.csv")
+
+Weight_Log <- read.csv("E:/Capstone projects_Google/Case Study 2/Data Set/Fitabase Data 4.12.16-5.12.16/dailyIntensities_merged.csv")
+
+
+```
+
+##### Overview of data
+
+```{r}
+skim_without_charts(Daily_Activity)
+
+skim_without_charts(Daily_Calories)
+
+skim_without_charts(Daily_Intensities)
+
+skim_without_charts(Daily_Steps)
+
+skim_without_charts(Sleep_Day)
+
+skim_without_charts(Weight_Log)
+```
+
+
+
+```{r}
+colnames(Daily_Activity)
+
+colnames(Daily_Calories)
+
+colnames(Daily_Intensities)
+
+colnames(Daily_Steps)
+
+colnames(Sleep_Day)
+
+colnames(Weight_Log)
+
+```
+##### Data Cleaning
+
+###### Data Information checking
+
+```{r}
+str(Daily_Activity)
+
+str(Daily_Calories)
+
+str(Daily_Intensities)
+
+str(Daily_Steps)
+
+str(Sleep_Day)
+
+str(Weight_Log)
+```
+
+###### Any Missing value
+
+```{r}
+which(is.na(Daily_Activity))
+
+which(is.na(Daily_Calories))
+
+which(is.na(Daily_Intensities))
+
+which(is.na(Daily_Steps))
+
+which(is.na(Sleep_Day))
+
+which(is.na(Weight_Log))
+```
+
+###### Number of unique participants
+
+```{r}
+n_distinct(Daily_Activity$Id)
+
+n_distinct(Daily_Calories$Id)
+
+n_distinct(Daily_Intensities$Id)
+
+n_distinct(Daily_Steps$Id)
+
+n_distinct(Sleep_Day$Id)
+
+n_distinct(Weight_Log$Id)
+```
+## 4. Analyze
+
+##### Summary of Data
+
+```{r}
+summary(Daily_Activity)
+
+summary(Daily_Calories)
+
+summary(Daily_Intensities)
+
+summary(Daily_Steps)
+
+summary(Sleep_Day)
+
+summary(Weight_Log)
+```
+
+##### Visualization
+
+###### Finding relationship between steps and calories from Daily_Activity data with Graphs
+
+```{r}
+ggplot(data = Daily_Activity) +
+  geom_col(mapping = aes(x = Calories, y = TotalSteps), fill = "blue")
+
+```
+
+
+```{r}
+ggplot(data = Sleep_Day) + geom_smooth(mapping= aes(x=TotalMinutesAsleep, y=TotalTimeInBed),color = "blue") + geom_point(mapping= aes(x=TotalMinutesAsleep, y=TotalTimeInBed),color= "white")
+```
+
+
+###### Relationship between steps and sedentary minutes in Daily_Activity with Graphs
+
+```{r}
+ggplot(data = Daily_Activity, aes(x=TotalSteps, y=SedentaryMinutes, colour = "red")) + geom_point()
+```
+
+###### Finding relationship between total time in bed and total minutes asleep from Sleep_Day Data 
+
+```{r}
+ggplot(data = Sleep_Day, aes(x = TotalMinutesAsleep, y = TotalTimeInBed, color = "green")) +geom_point()
+
+```
+```{r}
+ggplot(data = Sleep_Day) + geom_smooth(mapping= aes(x=TotalMinutesAsleep, y=TotalTimeInBed),color = "red") + geom_point(mapping= aes(x=TotalMinutesAsleep, y=TotalTimeInBed),color= "blue")
+```
+
+
+
+###### Finding relationship between Very Active Minutes and Very Active Distance from Weight_Log data with Graphs
+
+```{r}
+
+ggplot(data = Weight_Log) +
+  geom_col(mapping = aes(x = VeryActiveMinutes, y = VeryActiveDistance), fill = "blue")
+```
+
+##### Merging Daily Activity and Sleep Day dataset
+
+```{r}
+DailyActivity_SleepDay <- merge(Daily_Activity, Sleep_Day, all = TRUE)
+
+view(DailyActivity_SleepDay)
+
+colnames(DailyActivity_SleepDay)
+```
+###### Number of unique participants in combined dataset
+
+```{r}
+n_distinct(DailyActivity_SleepDay$Id)
+```
+###### User activities in minutes through Pie Chart
+
+```{r}
+Sedentary <- sum(DailyActivity_SleepDay$SedentaryMinutes)
+Active <- sum(DailyActivity_SleepDay$VeryActiveMinutes)
+Fairly <- sum(DailyActivity_SleepDay$FairlyActiveMinutes)
+Lightly <- sum(DailyActivity_SleepDay$LightlyActiveMinutes)
+
+x <- c(Sedentary,Lightly,Fairly,Active)
+labels <- c("Sedentary", "Lightly Active", "Fairly Active", "Very Active")
+
+piepercent <- round(100*x/sum(x),1)
+
+labels <- paste0(piepercent,"%")
+
+colour = brewer.pal(length(piepercent), "Set2")
+
+pie(x,labels = labels, main = "Active Minutes Pie Chart", col = colour, cex = 0.65)
+
+
+legend("topright",c("Sedentary","Lightly Active", "Fairly Active", "Very Active"), cex = 0.9, fill = colour)
+
+```
+
+
+###### Add a new coloumn in the combined dataset converting 'char' into 'Date'.
+
+```{r}
+DailyActivity_SleepDay$ActivityDate2 <- mdy(DailyActivity_SleepDay$ActivityDate)
+
+colnames(DailyActivity_SleepDay)
+```
+###### convert activity date into days of week.
+
+```{r}
+DailyActivity_SleepDay$weekday <- wday(DailyActivity_SleepDay$ActivityDate2, label = TRUE)
+
+colnames(DailyActivity_SleepDay)
+
+head(DailyActivity_SleepDay$weekday)
+```
+
+
+```{r}
+ggplot(data = DailyActivity_SleepDay, aes(x = weekday)) + geom_bar(fill = brewer.pal(7, "Set2")) + labs(title = "User logged activity in a week", x = "Day of week", y = "Activity Frequency")
+```
+
+## 5. Share
+
+1. Positive correlation between total steps and calories burnt.
+2. Negative correlation between total steps and sedenatary minutes.
+3. Positive correlation between total minutes in bed and total minutes asleep.
+4. Daily activity high in mid of the week.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
